@@ -1,0 +1,159 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+HERDR="${HERDR_BIN:-$HOME/.local/bin/herdr}"
+BUG="$HOME/Study/BugHunt"
+
+if ! "$HERDR" status 2>/dev/null | grep -q 'status: running'; then
+  printf 'herdr server is not running. Open foot/herdr first (Meta+Enter).\n' >&2
+  exit 1
+fi
+
+find_ws() {
+  "$HERDR" workspace list |
+    jq -r --arg l "$1" '.result.workspaces[] | select(.label == $l or (.label | startswith($l + ":"))) | .workspace_id' |
+    head -n1
+}
+
+focus_ws() {
+  "$HERDR" workspace focus "$1" >/dev/null
+  printf 'focused %s\n' "$1"
+}
+
+create_ws() {
+  "$HERDR" workspace create --label "$1" --cwd "$2" --no-focus
+}
+
+create_tab() {
+  "$HERDR" tab create --workspace "$1" --label "$2" --cwd "$3" --no-focus |
+    jq -r '.result.root_pane.pane_id'
+}
+
+finish() {
+  sleep 0.3
+  "$HERDR" workspace focus "$1" >/dev/null
+  printf 'workspace %s ready\n' "$1"
+}
+
+preset="${1:-}"
+if [[ -z "$preset" ]]; then
+  choices=$(
+    {
+      "$HERDR" workspace list | jq -r '.result.workspaces[] | "workspace|\(.workspace_id)|● \(.label)  [\(.tab_count)t/\(.pane_count)p]"'
+      printf 'preset|normal|+ normal — one shell at ~\n'
+      printf 'preset|coding|+ coding — nvim + shell + AI\n'
+      printf 'preset|pentest|+ pentest — recon / web / AI / notes\n'
+      printf 'preset|ctf|+ ctf — new capture-the-flag workspace\n'
+      printf "preset|notes|+ notes — today's engagement note\n"
+      printf 'preset|custom|+ custom — workspace for an existing directory\n'
+    }
+  )
+  selection=$(printf '%s\n' "$choices" |
+    fzf --height=80% --delimiter='|' --with-nth=3 --prompt='herdr session> ' \
+      --header='Pick a workspace or preset (esc = open herdr as-is)')
+  [[ -n "${selection:-}" ]] || exit 0
+  kind=${selection%%|*}
+  rest=${selection#*|}
+  value=${rest%%|*}
+  if [[ "$kind" == "workspace" ]]; then
+    focus_ws "$value"
+    exit 0
+  fi
+  preset="$value"
+fi
+[[ -n "${preset:-}" ]] || exit 0
+
+case "$preset" in
+normal)
+  existing=$(find_ws normal)
+  if [[ -n "$existing" ]]; then focus_ws "$existing"; exit 0; fi
+  json=$(create_ws normal "$HOME")
+  ws=$(jq -r '.result.workspace.workspace_id' <<<"$json")
+  root=$(jq -r '.result.root_pane.pane_id' <<<"$json")
+  "$HERDR" pane rename "$root" shell >/dev/null
+  finish "$ws"
+  ;;
+
+coding)
+  existing=$(find_ws coding)
+  if [[ -n "$existing" ]]; then focus_ws "$existing"; exit 0; fi
+  json=$(create_ws coding "$HOME")
+  ws=$(jq -r '.result.workspace.workspace_id' <<<"$json")
+  root=$(jq -r '.result.root_pane.pane_id' <<<"$json")
+  "$HERDR" pane rename "$root" editor >/dev/null
+  sleep 0.3
+  "$HERDR" pane run "$root" /usr/bin/nvim
+  create_tab "$ws" shell "$HOME" >/dev/null
+  ai=$(create_tab "$ws" ai "$HOME")
+  sleep 0.3
+  "$HERDR" pane run "$ai" /usr/bin/cmd
+  finish "$ws"
+  ;;
+
+pentest)
+  existing=$(find_ws pentest)
+  if [[ -n "$existing" ]]; then focus_ws "$existing"; exit 0; fi
+  exec "$HOME/.local/bin/herdr-pentest" "$BUG"
+  ;;
+
+notes)
+  existing=$(find_ws notes)
+  if [[ -n "$existing" ]]; then focus_ws "$existing"; exit 0; fi
+  mkdir -p "$BUG/notes"
+  file="$BUG/notes/$(date +%F)-engagement.md"
+  [[ -f "$file" ]] || printf '# Engagement notes\n\n## Scope / authorization\n\n## Findings\n' >"$file"
+  json=$(create_ws notes "$BUG")
+  ws=$(jq -r '.result.workspace.workspace_id' <<<"$json")
+  root=$(jq -r '.result.root_pane.pane_id' <<<"$json")
+  sleep 0.3
+  "$HERDR" pane run "$root" /usr/bin/nvim "$file"
+  finish "$ws"
+  ;;
+
+ctf)
+  read -r -p 'ctf name: ' name
+  name="${name// /-}"
+  name="${name//\//-}"
+  [[ -n "$name" ]] || exit 1
+  dir_default="$BUG/ctf/$name"
+  read -r -p "directory [$dir_default]: " dir
+  dir="${dir:-$dir_default}"
+  dir="${dir/#\~/$HOME}"
+  mkdir -p "$dir"
+  label="ctf:$name"
+  existing=$(find_ws "$label")
+  if [[ -n "$existing" ]]; then focus_ws "$existing"; exit 0; fi
+  notes="$dir/notes.md"
+  [[ -f "$notes" ]] || printf '# %s\n\n## Target\n\n## Recon\n\n## Findings\n' "$name" >"$notes"
+  json=$(create_ws "$label" "$dir")
+  ws=$(jq -r '.result.workspace.workspace_id' <<<"$json")
+  root=$(jq -r '.result.root_pane.pane_id' <<<"$json")
+  "$HERDR" pane rename "$root" shell >/dev/null
+  notes_pane=$(create_tab "$ws" notes "$dir")
+  ai_pane=$(create_tab "$ws" ai "$dir")
+  sleep 0.3
+  "$HERDR" pane run "$notes_pane" /usr/bin/nvim "$notes"
+  "$HERDR" pane run "$ai_pane" /usr/bin/cmd
+  finish "$ws"
+  ;;
+
+custom)
+  read -r -p 'workspace directory: ' dir
+  dir="${dir/#\~/$HOME}"
+  if [[ ! -d "$dir" ]]; then
+    printf 'not a directory: %s\n' "$dir" >&2
+    exit 1
+  fi
+  label="custom:$(basename "$dir")"
+  existing=$(find_ws "$label")
+  if [[ -n "$existing" ]]; then focus_ws "$existing"; exit 0; fi
+  json=$(create_ws "$label" "$dir")
+  ws=$(jq -r '.result.workspace.workspace_id' <<<"$json")
+  finish "$ws"
+  ;;
+
+*)
+  printf 'unknown preset: %s\n' "$preset" >&2
+  exit 1
+  ;;
+esac

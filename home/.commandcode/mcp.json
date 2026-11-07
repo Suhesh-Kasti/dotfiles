@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "arson-framework": {
+      "transport": "stdio",
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--sse",
+        "http://localhost:3001/sse",
+        "--logLevel",
+        "none"
+      ]
+    },
+    "burp": {
+      "transport": "stdio",
+      "enabled": true,
+      "command": "npx",
+      "args": [
+        "-y",
+        "supergateway",
+        "--sse",
+        "http://127.0.0.1:9876/",
+        "--logLevel",
+        "none"
+      ]
+    }
+  }
+}

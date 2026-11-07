@@ -1,0 +1,264 @@
+[05d963a9-115d-4468-abdd-b2ee24beafae]
+Description=Anydesk on {WORK} and V-(3)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=a325e3dc-a7f5-4ea5-9d0d-c12ed86694f2
+desktopsrule=2
+fsplevelrule=2
+title=AnyDesk
+types=1
+wmclass=anydesk anydesk
+wmclasscomplete=true
+wmclassmatch=1
+
+[111db6a9-6cc4-40ab-a011-e9396ae47b6e]
+Description=Dolphins Everywhere
+desktops=\\0
+desktopsrule=2
+title=.*Dolphin.*
+wmclass=dolphin org.kde.dolphin
+wmclasscomplete=true
+wmclassmatch=1
+
+[165cc41e-9281-48bd-8c52-c0d2472dc151]
+Description=Burp Chromium on {CyberSec} and V-(7)
+activity=d7dbccdc-02b9-4215-b5dc-3d1cbcae8e01
+activityrule=2
+desktops=a4796b77-cd4c-43a2-9db4-c1544f357464
+desktopsrule=2
+windowrole=browser
+wmclass=chrome chromium-browser
+wmclasscomplete=true
+wmclassmatch=1
+
+[23abfa40-17a3-47b9-aaa9-0ed680375973]
+Description=Zen on {CyberSec} and V-(7)
+activity=d7dbccdc-02b9-4215-b5dc-3d1cbcae8e01
+activityrule=2
+desktops=a4796b77-cd4c-43a2-9db4-c1544f357464
+desktopsrule=2
+windowrole=browser
+wmclass=zen-bin zen
+wmclasscomplete=true
+wmclassmatch=1
+
+[247e2199-0bfa-4912-858f-8cd87587f219]
+Description=Spotify on V-(6)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=09dd9056-9325-4b37-86a4-0c72eb4271a1
+desktopsrule=2
+fsplevelrule=2
+types=1
+windowrole=spotify
+wmclass=spotify Spotify
+wmclasscomplete=true
+wmclassmatch=1
+
+[26360429-942a-4ad8-9831-e4915132b084]
+Description=Obsidian on V-(6)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=59b6cddf-71a9-4036-9996-3e51d2e7efde
+desktopsrule=2
+fsplevelrule=2
+types=1
+wmclass=electron md.obsidian.Obsidian
+wmclasscomplete=true
+wmclassmatch=1
+
+[3226797c-66e1-4d10-a3b5-c8cb12e03fd0]
+Description=OnlyOffice on {WORK} and V-(3)
+activity=9f43b293-5a81-4a32-b50d-363e3a420755
+activityrule=2
+desktops=59b6cddf-71a9-4036-9996-3e51d2e7efde
+desktopsrule=2
+fsplevelrule=2
+types=1
+wmclass=DesktopEditors ONLYOFFICE
+wmclasscomplete=true
+wmclassmatch=2
+
+[39821b34-ee59-46aa-a50f-9664dde934d3]
+Description=Telegram on V-(8)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=51130107-72e3-4efc-bc9d-bc765991cbf0
+desktopsrule=2
+fsplevelrule=2
+types=1
+wmclass=AyuGram com.ayugram.desktop
+wmclasscomplete=true
+wmclassmatch=1
+
+[44f265ba-d788-475d-bc96-69ac7b4b0afe]
+Description=Vivaldi on V-(2)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=f6e2e6dc-a2b8-415f-9c76-365af95aae11
+desktopsrule=2
+fsplevelrule=2
+types=1
+wmclass=vivaldi-bin vivaldi-stable
+wmclasscomplete=true
+wmclassmatch=2
+
+[47f6f6a5-ba1c-4fe0-a018-a1133282afe7]
+Description=Outlook on {WORK} and V-(7)
+activity=9f43b293-5a81-4a32-b50d-363e3a420755
+activityrule=2
+desktops=a4796b77-cd4c-43a2-9db4-c1544f357464
+desktopsrule=2
+fsplevelrule=2
+title=.*Outlook.*
+titlematch=3
+types=1
+wmclass=.*vivaldi.*
+wmclassmatch=3
+
+[502db203-1a6e-4270-a281-189f8a4daa1f]
+Description=Video Player on V-(5)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=1dda7e84-0f2c-4a89-9d5f-8b725f9d7352
+desktopsrule=2
+fsplevelrule=2
+title=.*Haruna.*
+titlematch=3
+types=1
+wmclass=haruna org.kde.haruna
+wmclasscomplete=true
+wmclassmatch=3
+
+[54f5f421-dbb3-4e9a-aa2b-67252af7a3e3]
+Description=Alacritty on V-(1)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=d9d1d7af-11f6-49d4-bb2e-a3e4fd8c9786
+desktopsrule=2
+fsplevelrule=2
+title=Alacritty@CachyOS
+types=1
+wmclass=alacritty Alacritty
+wmclasscomplete=true
+wmclassmatch=1
+
+[56f9c68f-d9ef-411e-ac5c-f687418dbad9]
+Description=Teams on {WORK} and V-(8)
+activity=9f43b293-5a81-4a32-b50d-363e3a420755
+activityrule=2
+desktops=51130107-72e3-4efc-bc9d-bc765991cbf0
+desktopsrule=2
+fsplevelrule=2
+title=.*Microsoft Teams.*
+titlematch=3
+types=1
+wmclass=.*vivaldi.*
+wmclassmatch=3
+
+[7bb23993-91c4-4628-b402-79b0aaa7bc8b]
+Description=Whatsapp on V-(8)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=51130107-72e3-4efc-bc9d-bc765991cbf0
+desktopsrule=2
+fsplevelrule=2
+title=.*WhatsApp.*
+titlematch=3
+types=1
+wmclass=whatsie com.ktechpit.whatsie
+wmclasscomplete=true
+wmclassmatch=1
+
+[8ec8a422-d2f5-41b0-9c1a-540d4093a49c]
+Description=Konsole on V-(1)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=d9d1d7af-11f6-49d4-bb2e-a3e4fd8c9786
+desktopsrule=2
+fsplevelrule=2
+title=Alacritty@CachyOS
+types=1
+wmclass=konsole org.kde.konsole
+wmclasscomplete=true
+wmclassmatch=1
+
+[9c80d4cd-e15a-4c06-943d-b3c0c5500b48]
+Description=Foot on V-(1)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=d9d1d7af-11f6-49d4-bb2e-a3e4fd8c9786
+desktopsrule=2
+fsplevelrule=2
+title=Alacritty@CachyOS
+types=1
+wmclass=foot foot
+wmclasscomplete=true
+wmclassmatch=1
+
+[General]
+Order=54f5f421-dbb3-4e9a-aa2b-67252af7a3e3,9c80d4cd-e15a-4c06-943d-b3c0c5500b48,8ec8a422-d2f5-41b0-9c1a-540d4093a49c,26360429-942a-4ad8-9831-e4915132b084,247e2199-0bfa-4912-858f-8cd87587f219,e86b3008-dc53-431d-a303-cf8db5325cbb,7bb23993-91c4-4628-b402-79b0aaa7bc8b,39821b34-ee59-46aa-a50f-9664dde934d3,05d963a9-115d-4468-abdd-b2ee24beafae,b3694da5-4f84-4832-8949-120ba10d7002,b8a71244-3b71-48ca-a690-c67d8c74c0a1,a2a3c2d6-85e6-4c5f-b783-a3d296cd4a48,502db203-1a6e-4270-a281-189f8a4daa1f,56f9c68f-d9ef-411e-ac5c-f687418dbad9,47f6f6a5-ba1c-4fe0-a018-a1133282afe7,44f265ba-d788-475d-bc96-69ac7b4b0afe,3226797c-66e1-4d10-a3b5-c8cb12e03fd0,ea3973b4-8937-48fe-befe-1c9887acf054,165cc41e-9281-48bd-8c52-c0d2472dc151,23abfa40-17a3-47b9-aaa9-0ed680375973,111db6a9-6cc4-40ab-a011-e9396ae47b6e
+
+[a2a3c2d6-85e6-4c5f-b783-a3d296cd4a48]
+Description=Jellyfin on V-(5)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=1dda7e84-0f2c-4a89-9d5f-8b725f9d7352
+desktopsrule=2
+fsplevelrule=2
+title=.*Jellyfin.*
+titlematch=3
+types=1
+wmclass=.*vivaldi.*
+wmclasscomplete=true
+wmclassmatch=3
+
+[b3694da5-4f84-4832-8949-120ba10d7002]
+Description=BurpSuite on {CyberSec} and V-(3)
+activity=d7dbccdc-02b9-4215-b5dc-3d1cbcae8e01
+activityrule=2
+desktops=a325e3dc-a7f5-4ea5-9d0d-c12ed86694f2
+desktopsrule=2
+title=.*Burp Suite.*
+titlematch=3
+wmclass=burp-StartBurp burp-StartBurp
+wmclasscomplete=true
+wmclassmatch=1
+
+[b8a71244-3b71-48ca-a690-c67d8c74c0a1]
+Description=Youtube on V-(5)
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=1dda7e84-0f2c-4a89-9d5f-8b725f9d7352
+desktopsrule=2
+fsplevelrule=2
+title=.*YouTube.*
+titlematch=3
+types=1
+wmclass=.*vivaldi.*
+wmclasscomplete=true
+wmclassmatch=3
+
+[e86b3008-dc53-431d-a303-cf8db5325cbb]
+Description=PIP on top
+above=true
+aboverule=2
+activity=00000000-0000-0000-0000-000000000000
+activityrule=2
+desktops=\\0
+desktopsrule=2
+title=Picture in picture
+titlematch=1
+wmclass=vivaldi-bin
+wmclassmatch=1
+
+[ea3973b4-8937-48fe-befe-1c9887acf054]
+Description=Thorium on {CyberSec} and V-(7)
+activity=d7dbccdc-02b9-4215-b5dc-3d1cbcae8e01
+activityrule=2
+desktops=a4796b77-cd4c-43a2-9db4-c1544f357464
+desktopsrule=2
+windowrole=browser
+wmclass=thorium-browser Thorium-browser
+wmclasscomplete=true
+wmclassmatch=1

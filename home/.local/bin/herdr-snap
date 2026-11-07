@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+HERDR="${HERDR_BIN:-$HOME/.local/bin/herdr}"
+OUTDIR="$HOME/Study/BugHunt/sessions"
+mkdir -p "$OUTDIR"
+
+if ! "$HERDR" status 2>/dev/null | grep -q 'status: running'; then
+  printf 'herdr server is not running.\n' >&2
+  exit 1
+fi
+
+pane=$("$HERDR" pane list | jq -r '.result.panes[] | select(.focused) | .pane_id' | head -n1)
+if [[ -z "${pane:-}" ]]; then
+  printf 'no focused pane found.\n' >&2
+  exit 1
+fi
+
+out="$OUTDIR/$(date +%Y%m%d-%H%M%S)-${pane//:/_}.log"
+"$HERDR" pane read "$pane" --lines 5000 --format text >"$out"
+
+printf '%s\n' "$out"
+notify-send -a herdr -i utilities-terminal 'Herdr snapshot saved' "$out" 2>/dev/null || true

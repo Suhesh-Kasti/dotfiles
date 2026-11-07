@@ -1,0 +1,14 @@
+[Libinput][1133][16468][Logitech Wireless Mouse]
+PointerAcceleration=0.000
+
+[Libinput][1267][12614][DELL0A7B:00 04F3:3146 Mouse]
+PointerAcceleration=0.200
+
+[Libinput][1267][12614][DELL0A7B:00 04F3:3146 Touchpad]
+NaturalScroll=true
+PointerAcceleration=0.200
+ScrollFactor=2
+
+[Mouse]
+cursorSize=30
+cursorTheme=Layan-white-cursors

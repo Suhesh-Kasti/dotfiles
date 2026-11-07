@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+HERDR="${HERDR_BIN:-$HOME/.local/bin/herdr}"
+
+if ! "$HERDR" status 2>/dev/null | grep -q 'status: running'; then
+  setsid "$HERDR" server </dev/null >/dev/null 2>&1 &
+  for _ in {1..100}; do
+    "$HERDR" status 2>/dev/null | grep -q 'status: running' && break
+    sleep 0.05
+  done
+fi
+
+"$HOME/.local/bin/herdr-sessions" || true
+exec "$HERDR"

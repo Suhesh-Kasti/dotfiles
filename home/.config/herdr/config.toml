@@ -1,0 +1,105 @@
+# Herdr — Catppuccin Mocha (matches foot) + pentest / AI bug-hunting workflow
+
+onboarding = false
+
+[theme]
+name = "catppuccin"
+
+[theme.custom]
+panel_bg = "reset"
+accent = "#89b4fa"
+
+[terminal]
+default_shell = "/usr/bin/zsh"
+new_cwd = "follow"
+kitty_graphics = false
+
+[update]
+channel = "stable"
+version_check = true
+manifest_check = true
+
+[keys]
+prefix = "ctrl+b"
+new_tab = "prefix+t"
+focus_agent = "prefix+alt+1..9"
+previous_agent = "prefix+alt+left"
+next_agent = "prefix+alt+right"
+toggle_sidebar = "prefix+shift+s"
+
+[[keys.command]]
+key = "prefix+alt+p"
+type = "shell"
+command = "/home/schizo/.local/bin/herdr-pentest"
+
+[[keys.command]]
+key = "prefix+alt+s"
+type = "shell"
+command = "/home/schizo/.local/bin/herdr-snap"
+
+[[keys.command]]
+key = "prefix+alt+a"
+type = "popup"
+command = "/usr/bin/cmd"
+width = "90%"
+height = "85%"
+
+[[keys.command]]
+key = "prefix+alt+n"
+type = "pane"
+command = "/usr/bin/nvim"
+
+[[keys.command]]
+key = "prefix+alt+b"
+type = "pane"
+command = "/usr/bin/btop"
+
+[[keys.command]]
+key = "prefix+alt+w"
+type = "pane"
+command = "/usr/bin/tshark -i any"
+
+[[keys.command]]
+key = "prefix+shift+m"
+type = "popup"
+command = "/home/schizo/.local/bin/herdr-sessions"
+width = "70%"
+height = "55%"
+
+[ui]
+sidebar_width = 30
+sidebar_start_collapsed = true
+sidebar_collapsed_mode = "hidden"
+hide_tab_bar_when_single_tab = true
+prompt_new_tab_name = false
+pane_borders = "always"
+pane_gaps = false
+sidebar_min_width = 22
+sidebar_max_width = 40
+mouse_capture = true
+copy_on_select = true
+confirm_close = true
+pane_outer_borders = true
+pane_scrollbars = true
+show_agent_labels_on_pane_borders = true
+tab_bar_position = "top"
+window_title = "{hostname}: {workspace}"
+agent_panel_sort = "priority"
+status_indicators = "symbols"
+
+[ui.toast]
+delivery = "system"
+delay_seconds = 1
+
+[ui.sound]
+enabled = false
+
+[session]
+resume_agents_on_restore = true
+startup_per_agent_delay_ms = 150
+
+[experimental]
+pane_history = true
+
+[advanced]
+scrollback_limit_bytes = 52428800

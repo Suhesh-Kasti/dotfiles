@@ -1,0 +1,24 @@
+# Taste Profile
+- Prefers reversible, non-destructive system changes: use `pm disable-user --user 0 <pkg>` for debloating and never `pm uninstall`. Confidence: 0.95
+- Expects explicit confirmation before every change: explain in plain English what the package/command does, then wait for an explicit "yes" (or a stated batching preference) before running it. Confidence: 0.95
+- Requires a maintained undo/rollback list of every change made, so the system can be fully restored later. Confidence: 0.9
+- Strongly conservative bias: "if unsure, leave it enabled"; a clear never-touch list of core services (GMS, Play Store, settings, systemui, launcher, setupwizard, inputmethod, bluetooth, tvinput, tuner, framework, private DNS) must be respected. Confidence: 0.85
+- Wants read-only verification and audit before any mutation: confirm connection, pull hardware/spec data, back up package lists, and categorize targets for review first. Confidence: 0.9
+- Wants verification of actual on-device state rather than assumptions — flagging when requested packages/commands don't match what's really installed, and confirming results with follow-up queries (e.g. `pm list packages | grep <keyword>`). Confidence: 0.8
+- Wants each app installed individually with its exact package name reported back after installation. Confidence: 0.7
+- Appreciates being handed a concrete manual check to perform on the device (e.g. open a text field to confirm the keyboard works) before proceeding. Confidence: 0.65
+- Prefers lightweight, FOSS, sideloaded apps from official GitHub/website releases over preinstalled vendor apps and stock OEM apps (e.g. SmartTube, Aurora Store, TV Bro, ReCloudstream, LeanKeyboard). Confidence: 0.8
+- Wants proactive expert suggestions beyond their own app list ("if you have better apps suggestions you can install them and ask me to check") and is happy to trial-then-uninstall anything unneeded; the stated goal is the best possible Android TV experience, not a minimal setup. Confidence: 0.8
+- Accepts a well-reasoned counter-proposal over their own stated command when the risk is explained (dropped `background_process_limit 1` in favour of 3; 0.5x animations instead of off). Confidence: 0.75
+- Expects quantified before/after evidence (free memory, package counts) plus a complete final inventory of installed apps, applied settings, disabled packages, and per-item revert commands at the end. Confidence: 0.8
+- Prefers DNS-level ad/tracker blocking and ad-free client apps (chose AdGuard DNS over plain Cloudflare; SmartTube over stock YouTube). Confidence: 0.7
+- Wants screencast/casting and mirroring functionality preserved when stripping out extra/preloaded apps. Confidence: 0.65
+- Willing to replace the stock home launcher with a preferred third-party one (Projectivy) when it improves the experience — the earlier "leave it be" was provisional, not a standing rule. Confidence: 0.8
+- Asks "what are these?" about unfamiliar OEM/vendor menus (Amlogic display/CEC/audio/poweron/sound DSP options) and wants each option explained option-by-option in plain English, not just changed. Confidence: 0.7
+- Comfortable delegating subjective hardware tuning to expert judgement ("can you set these up for the best TV experience") — accepted recommended AV values (CEC on, auto-language off, Dolby LINE, Dynamic Backlight off, Poweron=Last) as long as the reasoning and revert path are given. Confidence: 0.7
+- Expects root-cause explanations for broken/anomalous device behaviour (e.g. why a settings menu is empty) backed by actual device evidence — display modes, HAL/sysfs output, props — rather than guesses or generic workarounds. Confidence: 0.65
+- Wants hardware identity (model, panel resolution, RAM) cross-checked against authoritative sources and cited when OEM marketing specs conflict with what the device reports. Confidence: 0.6
+- Prefers a minimal, plain-terminal look in terminal multiplexers: sidebar collapsed/hidden and tab bar hidden by default, but pane dividers actually visible on splits, with the sidebar reachable via an explicit prefix shortcut (e.g. Ctrl+B then Shift+S). Confidence: 0.7
+- Wants Zellij-style preset "session" pickers — named profiles (normal, coding, pentest, notes) that build a predefined layout, selectable from a fuzzy-find menu and re-running one focuses the existing workspace instead of duplicating it. Confidence: 0.75
+- Wants the session/workspace picker to open automatically on terminal multiplexer launch, so picking a profile (coding, pentest, ctf, …) is the first interaction instead of an explicit command. Confidence: 0.75
+- Expects long-lived work state to survive both terminal close and full machine restart (detached persistent server that reattaches and restores workspace/tab layout), and wants to spin up new ad-hoc named sessions (e.g. a CTF) that persist the same way. Confidence: 0.8

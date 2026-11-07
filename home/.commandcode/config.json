@@ -1,0 +1,9 @@
+{
+  "provider": "command-code",
+  "installed": true,
+  "model": "deepseek/deepseek-v4.1-flash",
+  "firstMessageSent": true,
+  "reasoningEffort": {
+    "deepseek/deepseek-v4.1-flash": "high"
+  }
+}
