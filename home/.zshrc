@@ -49,6 +49,21 @@ setopt HIST_IGNORE_ALL_DUPS    # De-clutter duplicate entries
 setopt HIST_IGNORE_SPACE       # Prefix command with a space to hide passwords/keys from history
 
 # ==============================================================================
+# 4b. SSH AGENT (shared across terminals, key auto-loaded)
+# ==============================================================================
+export SSH_AUTH_SOCK="${XDG_RUNTIME_DIR:-$HOME/.ssh}/ssh-agent.sock"
+ssh-add -l >/dev/null 2>&1
+_ssh_agent_state=$?
+if (( _ssh_agent_state == 2 )); then
+  rm -f "$SSH_AUTH_SOCK"
+  eval "$(ssh-agent -s -a "$SSH_AUTH_SOCK")" >/dev/null 2>&1
+  ssh-add -q "$HOME/.ssh/github_access" </dev/null >/dev/null 2>&1
+elif (( _ssh_agent_state == 1 )); then
+  ssh-add -q "$HOME/.ssh/github_access" </dev/null >/dev/null 2>&1
+fi
+unset _ssh_agent_state
+
+# ==============================================================================
 # 5. MODERN REPLACEMENTS & COMPLETIONS INITIALIZATION
 # ==============================================================================
 export PATH="/home/schizo/.local/bin:$PATH"
