@@ -49,6 +49,16 @@ git push
 
 `save.sh` never deletes anything from the repo; it overwrites tracked files and stages them.
 
+## Herdr pane and tab names
+
+Inside herdr, new zsh panes label the pane and tab with the command being run, and with
+the current directory name when idle. Agent CLIs (`cmd`, `claude`, `codex`, …) are left to
+herdr's own agent detection instead.
+
+- Rename manually with herdr (`prefix+shift+p` for a pane, `prefix+shift+t` for a tab);
+  the manual name is detected and pinned, so the hooks stop overwriting it.
+- Re-enable automatic labels with `herdr-autoname reset` (or `hauto`) in that pane.
+
 ## Push to GitHub (first time)
 
 Create an empty repo on GitHub (no README), then:
@@ -64,7 +74,7 @@ git push -u origin main
 
 - Shell: `.zshrc`, `.p10k.zsh`, `.bashrc`, `.bash_profile`, `.gitconfig`
 - Terminal: `.config/foot/foot.ini` (template), `.config/alacritty`, herdr `config.toml`
-- Herdr helpers: `herdr-start`, `herdr-sessions`, `herdr-pentest`, `herdr-snap`
+- Herdr helpers: `herdr-start`, `herdr-sessions`, `herdr-pentest`, `herdr-snap`, `herdr-autoname`
 - Editor: `.config/nvim` (NvChad starter base, `lazy-lock.json` included)
 - Desktop: KDE `kdeglobals`, `kwinrc`, `kwinrulesrc`, `kglobalshortcutsrc`, `kcminputrc`,
   GTK 3/4 theme files and assets, Kvantum config, `mimeapps.list`

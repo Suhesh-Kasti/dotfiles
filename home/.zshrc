@@ -64,6 +64,139 @@ fi
 unset _ssh_agent_state
 
 # ==============================================================================
+# 4c. HERDR AUTO PANE/TAB LABELS (running command, manual renames win)
+# ==============================================================================
+if [[ -n "${HERDR_PANE_ID:-}" && -n "${HERDR_TAB_ID:-}" ]]; then
+  typeset -g _herdr_auto_dir="${XDG_CACHE_HOME:-$HOME/.cache}/herdr-autoname"
+  [[ -d "$_herdr_auto_dir" ]] || mkdir -p "$_herdr_auto_dir"
+
+  _herdr_cmd_name() {
+    local -a words
+    words=(${(z)1})
+    local w skip=0
+    for w in "${words[@]}"; do
+      if (( skip )); then skip=0; continue; fi
+      [[ "$w" == *=* ]] && continue
+      case "$w" in
+        sudo|doas|env|command|exec|nohup|time) continue ;;
+        -u|-g|-p|-C|-h|-T|-r|-t|-U) skip=1; continue ;;
+        -*) continue ;;
+      esac
+      break
+    done
+    print -r -- "${w:t}"
+  }
+
+  _herdr_is_agent() {
+    case "$1" in
+      cmd|command-code|claude|codex|gemini|aider|opencode|cursor-agent|goose|crush|qwen|qwen-code|kimi|droid|amp|grok|hermes|kilo|letta|letta-code|pi|omp|copilot|devin|agy|cline|mastracode|muse)
+        return 0 ;;
+    esac
+    return 1
+  }
+
+  _herdr_clear_auto_label() {
+    local bin="${HERDR_BIN_PATH:-herdr}"
+    local pane_state="$_herdr_auto_dir/pane-${HERDR_PANE_ID//:/_}"
+    local last label
+    [[ -f "$pane_state" ]] || return 0
+    last=$(<"$pane_state")
+    [[ "$last" == "PINNED" ]] && return 0
+    label=$("$bin" pane get "$HERDR_PANE_ID" 2>/dev/null | jq -r '.result.pane.label // empty' 2>/dev/null)
+    if [[ "$label" == "$last" ]]; then
+      "$bin" pane rename "$HERDR_PANE_ID" --clear >/dev/null 2>&1
+      rm -f "$pane_state"
+    fi
+  }
+
+  _herdr_update_labels() {
+    local desired="$1"
+    local bin="${HERDR_BIN_PATH:-herdr}"
+    local pane_state="$_herdr_auto_dir/pane-${HERDR_PANE_ID//:/_}"
+    local tab_state="$_herdr_auto_dir/tab-${HERDR_TAB_ID//:/_}"
+    local pane_label pane_focused pane_meta last pane_pinned=0
+
+    pane_meta=$("$bin" pane get "$HERDR_PANE_ID" 2>/dev/null |
+      jq -r '[.result.pane.label // "", .result.pane.focused] | @tsv' 2>/dev/null) || return 0
+    pane_label="${pane_meta%%$'\t'*}"
+    pane_focused="${pane_meta##*$'\t'}"
+
+    if [[ -f "$pane_state" ]]; then
+      last=$(<"$pane_state")
+      if [[ "$last" == "PINNED" ]]; then
+        if [[ -n "$pane_label" ]]; then
+          pane_pinned=1
+        else
+          rm -f "$pane_state"
+        fi
+      elif [[ "$pane_label" != "$last" ]]; then
+        print -r -- "PINNED" >"$pane_state"
+        pane_pinned=1
+      fi
+    elif [[ -n "$pane_label" ]]; then
+      print -r -- "PINNED" >"$pane_state"
+      pane_pinned=1
+    fi
+
+    if (( ! pane_pinned )); then
+      [[ "$pane_label" == "$desired" ]] || "$bin" pane rename "$HERDR_PANE_ID" "$desired" >/dev/null 2>&1
+      print -r -- "$desired" >"$pane_state"
+    fi
+
+    [[ "$pane_focused" == "true" ]] || return 0
+
+    local tab_label tab_number tab_meta tlast tab_pinned=0
+    tab_meta=$("$bin" tab get "$HERDR_TAB_ID" 2>/dev/null |
+      jq -r '[.result.tab.label // "", .result.tab.number] | @tsv' 2>/dev/null) || return 0
+    tab_label="${tab_meta%%$'\t'*}"
+    tab_number="${tab_meta##*$'\t'}"
+
+    if [[ -f "$tab_state" ]]; then
+      tlast=$(<"$tab_state")
+      if [[ "$tlast" == "PINNED" ]]; then
+        if [[ "$tab_label" == "$tab_number" ]]; then
+          rm -f "$tab_state"
+        else
+          tab_pinned=1
+        fi
+      elif [[ "$tab_label" != "$tlast" ]]; then
+        print -r -- "PINNED" >"$tab_state"
+        tab_pinned=1
+      fi
+    elif [[ -n "$tab_label" && "$tab_label" != "$tab_number" ]]; then
+      print -r -- "PINNED" >"$tab_state"
+      tab_pinned=1
+    fi
+
+    if (( ! tab_pinned )); then
+      [[ "$tab_label" == "$desired" ]] || "$bin" tab rename "$HERDR_TAB_ID" "$desired" >/dev/null 2>&1
+      print -r -- "$desired" >"$tab_state"
+    fi
+  }
+
+  _herdr_preexec() {
+    local name
+    name=$(_herdr_cmd_name "$1")
+    [[ -n "$name" ]] || return 0
+    if _herdr_is_agent "$name"; then
+      _herdr_clear_auto_label
+      return 0
+    fi
+    _herdr_update_labels "$name"
+  }
+
+  _herdr_precmd() {
+    local dir="${PWD:t}"
+    [[ "$PWD" == "$HOME" ]] && dir="~"
+    _herdr_update_labels "$dir"
+  }
+
+  autoload -Uz add-zsh-hook
+  add-zsh-hook preexec _herdr_preexec
+  add-zsh-hook precmd _herdr_precmd
+fi
+
+# ==============================================================================
 # 5. MODERN REPLACEMENTS & COMPLETIONS INITIALIZATION
 # ==============================================================================
 export PATH="/home/schizo/.local/bin:$PATH"
@@ -102,6 +235,7 @@ alias cat='bat --style=plain'
 alias hs='herdr-sessions'
 alias pen='herdr-pentest'
 alias snap='herdr-snap'
+alias hauto='herdr-autoname reset'
 hws() { herdr workspace list 2>/dev/null | jq -r '.result.workspaces[] | "\(.workspace_id)\t\(.label)"'; }
 
 # Networking & Recon

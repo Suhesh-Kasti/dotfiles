@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+BIN="${HERDR_BIN_PATH:-${HERDR_BIN:-$HOME/.local/bin/herdr}}"
+STATE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/herdr-autoname"
+
+: "${HERDR_PANE_ID:?not running inside a herdr pane}"
+: "${HERDR_TAB_ID:?not running inside a herdr pane}"
+
+pane_state="$STATE_DIR/pane-${HERDR_PANE_ID//:/_}"
+tab_state="$STATE_DIR/tab-${HERDR_TAB_ID//:/_}"
+
+case "${1:-reset}" in
+reset)
+  rm -f "$pane_state" "$tab_state"
+  "$BIN" pane rename "$HERDR_PANE_ID" --clear >/dev/null 2>&1 || true
+  tab_number=$("$BIN" tab get "$HERDR_TAB_ID" | jq -r '.result.tab.number')
+  "$BIN" tab rename "$HERDR_TAB_ID" "$tab_number" >/dev/null 2>&1 || true
+  printf 'auto-labeling re-enabled for %s / %s\n' "$HERDR_PANE_ID" "$HERDR_TAB_ID"
+  ;;
+status)
+  printf 'pane %s: %s\n' "$HERDR_PANE_ID" "$(cat "$pane_state" 2>/dev/null || echo auto)"
+  printf 'tab  %s: %s\n' "$HERDR_TAB_ID" "$(cat "$tab_state" 2>/dev/null || echo auto)"
+  ;;
+*)
+  printf 'usage: herdr-autoname [reset|status]\n' >&2
+  exit 1
+  ;;
+esac
